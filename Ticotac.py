@@ -1,6 +1,8 @@
 import time
 import random
 
+global board
+global move
 def print_board(board):
 	print "The board look like this: \n"
 	for i in range(3):
@@ -94,8 +96,42 @@ def build_tree(node, piece):
     if child_nodes:
         return [node,child_nodes]
     return
+def computerMove(board):
+    start = time.time()
+    game_tree = build_tree(tuple(board),1)
+    end = time.time()
+    #print game_tree
+    print ("time elapsed calculating ", end-start)
+    computer = random.randint(1,9)-1
+    while board[computer] != 0:
+        computer = random.randint(1,9)-1
+    board[computer] = 1
+    print (board)
+    return board
+
+def alreadyAwinner(board, move):
+    if move > 4:
+        winner = check_win(board)
+        if winner != 0:
+            out = "The winner is "
+            out += "X" if winner == 1 else "O"
+            out += " :)"
+            quit_game(board,out)
+        elif move == 9:
+            quit_game(board,"No winner :(")
+    return board
+
+def userMove(board):
+    user = get_input()
+    while board[user] != 0:
+        print "Invalid move! Cell already taken. Please try again.\n"
+        user = get_input()
+    board[user] = -1
+    return board
+
 
 def main():
+    
     board = []
     print_instruction()
     for i in range(9):
@@ -104,66 +140,28 @@ def main():
     win = False
     move = 0
     answer = know_whos_first()
+    
     if answer == 1:
         while not win:
-            start = time.time()
-            game_tree = build_tree(tuple(board),1)
-            end = time.time()
-            #print game_tree
-            print ("time elapsed calculating ", end-start)
-
-            computer = random.randint(1,9)-1
-            while board[computer] != 0:
-                computer = random.randint(1,9)-1
-            board[computer] = 1
-            print (board)
+            computerMove(board)
+            move += 1
             print_board(board)
+            print move
+            alreadyAwinner(board, move)
+            userMove(board)
             move += 1
-            if move > 4:
-                winner = check_win(board)
-                if winner != 0:
-                    out = "The winner is "
-                    out += "X" if winner == 1 else "O"
-                    out += " :)"
-                    quit_game(board,out)
-                elif move == 9:
-                    quit_game(board,"No winner :(")
-        
-            user = get_input()
-            while board[user] != 0:
-                print "Invalid move! Cell already taken. Please try again.\n"
-                user = get_input()
-            board[user] = -1
-            move += 1
+            print move
+            print_board(board)
+            alreadyAwinner(board, move)
     else:
         while not win:
-            if move > 4:
-                winner = check_win(board)
-                if winner != 0:
-                    out = "The winner is "
-                    out += "X" if winner == 1 else "O"
-                    out += " :)"
-                    quit_game(board,out)
-                elif move >= 9:
-                    quit_game(board,"No winner :(")
-            user = get_input()
-            while board[user] != 0:
-                print "Invalid move! Cell already taken. Please try again.\n"
-                user = get_input()
-            board[user] = -1
+            userMove(board)
             move += 1
-            start = time.time()
-            game_tree = build_tree(tuple(board),1)
-            end = time.time()
-            #print game_tree
-            print ("time elapsed calculating ", end-start)
-            computer = random.randint(1,9)-1
-            while board[computer] != 0:
-                computer = random.randint(1,9)-1
-            board[computer] = 1
-            print (board)
             print_board(board)
+            alreadyAwinner(board, move)
+            computerMove(board)
             move += 1
-
+            print_board(board)
+            alreadyAwinner(board, move)
 if __name__ == "__main__":
     main()
