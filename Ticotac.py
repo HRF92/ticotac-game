@@ -143,13 +143,11 @@ def main():
     answer = know_whos_first()
     while not win:
         moveAtAtime(board, answer)
-        answer = -answer
         move += 1
         print_board(board)
         #print move
         alreadyAwinner(board, move)
-        moveAtAtime(board, answer)
-        answer = -answer
+        moveAtAtime(board, -answer)
         move += 1
         #print move
         print_board(board)
