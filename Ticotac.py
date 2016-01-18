@@ -96,18 +96,28 @@ def build_tree(node, piece):
     if child_nodes:
         return [node,child_nodes]
     return
-def computerMove(board):
-    start = time.time()
-    game_tree = build_tree(tuple(board),1)
-    end = time.time()
-    #print game_tree
-    print ("time elapsed calculating ", end-start)
-    computer = random.randint(1,9)-1
-    while board[computer] != 0:
+
+def moveAtAtime(board, whosturn):
+    if whosturn == -1:
+        user = get_input()
+        while board[user] != 0:
+            print "Invalid move! Cell already taken. Please try again.\n"
+            user = get_input()
+        board[user] = -1
+        return board
+
+    else:
+        start = time.time()
+        game_tree = build_tree(tuple(board),1)
+        end = time.time()
+        #print game_tree
+        print ("time elapsed calculating ", end-start)
         computer = random.randint(1,9)-1
-    board[computer] = 1
-    print (board)
-    return board
+        while board[computer] != 0:
+            computer = random.randint(1,9)-1
+        board[computer] = 1
+        print (board)
+        return board
 
 def alreadyAwinner(board, move):
     if move > 4:
@@ -121,15 +131,6 @@ def alreadyAwinner(board, move):
             quit_game(board,"No winner :(")
     return board
 
-def userMove(board):
-    user = get_input()
-    while board[user] != 0:
-        print "Invalid move! Cell already taken. Please try again.\n"
-        user = get_input()
-    board[user] = -1
-    return board
-
-
 def main():
     
     board = []
@@ -140,28 +141,19 @@ def main():
     win = False
     move = 0
     answer = know_whos_first()
-    
-    if answer == 1:
-        while not win:
-            computerMove(board)
-            move += 1
-            print_board(board)
-            print move
-            alreadyAwinner(board, move)
-            userMove(board)
-            move += 1
-            print move
-            print_board(board)
-            alreadyAwinner(board, move)
-    else:
-        while not win:
-            userMove(board)
-            move += 1
-            print_board(board)
-            alreadyAwinner(board, move)
-            computerMove(board)
-            move += 1
-            print_board(board)
-            alreadyAwinner(board, move)
+    while not win:
+        moveAtAtime(board, answer)
+        answer = -answer
+        move += 1
+        print_board(board)
+        #print move
+        alreadyAwinner(board, move)
+        moveAtAtime(board, answer)
+        answer = -answer
+        move += 1
+        #print move
+        print_board(board)
+        alreadyAwinner(board, move)
+
 if __name__ == "__main__":
     main()
