@@ -96,7 +96,14 @@ def build_tree(node, piece):
     if child_nodes:
         return [node,child_nodes]
     return
-
+def minmax(game_tree):
+    parent = game_tree[1]
+    while len(parent)> 1:
+        print parent
+        parent = parent[1]
+        print parent
+    print check_win(list(parent[0]))
+    return
 def moveAtAtime(board, whosturn):
     if whosturn == -1:
         user = get_input()
@@ -107,11 +114,13 @@ def moveAtAtime(board, whosturn):
         return board
 
     else:
+        
         start = time.time()
         game_tree = build_tree(tuple(board),1)
         end = time.time()
         #print game_tree
         print ("time elapsed calculating ", end-start)
+        minmax(game_tree)
         computer = random.randint(1,9)-1
         while board[computer] != 0:
             computer = random.randint(1,9)-1
