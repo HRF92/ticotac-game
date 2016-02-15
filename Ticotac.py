@@ -97,12 +97,14 @@ def build_tree(node, piece):
         return [node,child_nodes]
     return
 def minmax(game_tree):
-    parent = game_tree[1]
-    while len(parent)> 1:
+    parent = game_tree[0]
+    child = game_tree[1]
+    while len(child)>2:
+        print child
+        parent = child[0]
         print parent
-        parent = parent[1]
-        print parent
-    print check_win(list(parent[0]))
+        child = child[1]
+        print check_win(list(parent[1]))
     return
 def moveAtAtime(board, whosturn):
     if whosturn == -1:
