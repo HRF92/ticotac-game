@@ -4,7 +4,7 @@ import random
 global board
 global move
 def print_board(board):
-	print "The board look like this: \n"
+	print "The board looks like this: \n"
 	for i in range(3):
 		print " ",
 		for j in range(3):
